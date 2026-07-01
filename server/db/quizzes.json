@@ -1,0 +1,40 @@
+{
+  "quizzes": [
+    {
+      "id": "d12b35ea-8e45-4d82-af12-21370622d5c6",
+      "title": "Character Guessing",
+      "slug": "character",
+      "timer": 30,
+      "createdAt": "2026-07-01T18:09:12.510Z",
+      "updatedAt": "2026-07-01T18:09:12.510Z",
+      "questions": []
+    },
+    {
+      "id": "4483973e-904a-46f8-ab74-1b6a4e6c737f",
+      "title": "Guess the Word",
+      "slug": "word",
+      "timer": 20,
+      "createdAt": "2026-07-01T18:09:12.510Z",
+      "updatedAt": "2026-07-01T18:09:12.510Z",
+      "questions": []
+    },
+    {
+      "id": "ff400792-9d37-457b-be07-d3126a37b03a",
+      "title": "Guess the Movie",
+      "slug": "movie",
+      "timer": 30,
+      "createdAt": "2026-07-01T18:09:12.510Z",
+      "updatedAt": "2026-07-01T18:09:12.510Z",
+      "questions": []
+    },
+    {
+      "id": "cc1facaf-8ce6-4715-a3d2-d1105da1edb5",
+      "title": "Memory Challenge",
+      "slug": "memory",
+      "timer": 30,
+      "createdAt": "2026-07-01T18:09:12.510Z",
+      "updatedAt": "2026-07-01T18:09:12.510Z",
+      "questions": []
+    }
+  ]
+}

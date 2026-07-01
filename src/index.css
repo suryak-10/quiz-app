@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700&display=swap');
+
+:root {
+  color-scheme: dark;
+  --surface: #0b1326;
+  --surface-dim: #060e20;
+  --surface-low: #131b2e;
+  --surface-panel: rgba(23, 31, 51, 0.72);
+  --surface-panel-strong: rgba(45, 52, 73, 0.78);
+  --surface-bright: #31394d;
+  --on-surface: #dae2fd;
+  --on-surface-muted: #c7c4d7;
+  --outline: rgba(192, 193, 255, 0.22);
+  --primary: #c0c1ff;
+  --primary-strong: #8083ff;
+  --secondary: #ddb7ff;
+  --secondary-strong: #6f00be;
+  --tertiary: #3cddc7;
+  --error: #ffb4ab;
+  --success: #62fae3;
+  --warning: #ffb86b;
+  --shadow-primary: 0 24px 80px rgba(99, 102, 241, 0.28);
+  --shadow-secondary: 0 24px 80px rgba(168, 85, 247, 0.24);
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-label: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --container-margin: clamp(24px, 5vw, 64px);
+  --gutter: clamp(16px, 3vw, 32px);
+
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--on-surface);
+  background: var(--surface);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 20% 12%, rgba(128, 131, 255, 0.34), transparent 34rem),
+    radial-gradient(circle at 78% 2%, rgba(60, 221, 199, 0.18), transparent 30rem),
+    linear-gradient(135deg, #060e20 0%, #0b1326 46%, #131b2e 100%);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100svh;
+  margin: 0;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: '';
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(circle at center, black, transparent 78%);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(60, 221, 199, 0.78);
+  outline-offset: 4px;
+}
+
+#root {
+  min-height: 100svh;
+}

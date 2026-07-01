@@ -1,0 +1,17 @@
+{
+  "name": "office-quiz-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "fs-extra": "^11.3.0",
+    "multer": "^2.0.2",
+    "uuid": "^11.1.0"
+  }
+}

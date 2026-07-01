@@ -45,6 +45,7 @@
 html {
   min-width: 320px;
   min-height: 100%;
+  overflow: hidden;
   background:
     radial-gradient(circle at 20% 12%, rgba(128, 131, 255, 0.34), transparent 34rem),
     radial-gradient(circle at 78% 2%, rgba(60, 221, 199, 0.18), transparent 30rem),
@@ -55,6 +56,7 @@ body {
   min-width: 320px;
   min-height: 100svh;
   margin: 0;
+  overflow: hidden;
 }
 
 body::before {
@@ -93,4 +95,5 @@ a {
 
 #root {
   min-height: 100svh;
+  overflow: hidden;
 }

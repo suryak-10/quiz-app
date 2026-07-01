@@ -4,6 +4,7 @@ export type KeyboardShortcutHandlers = {
   onStart: () => void
   onPause: () => void
   onRestart: () => void
+  onDismissOverlay: () => void
   onCorrect: () => void
   onWrong: () => void
   onNext: () => void
@@ -56,6 +57,12 @@ export function useKeyboardShortcuts({
       if (key === 'r') {
         event.preventDefault()
         handlers.onRestart()
+        return
+      }
+
+      if (key === 'd' && !event.repeat) {
+        event.preventDefault()
+        handlers.onDismissOverlay()
         return
       }
 

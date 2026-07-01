@@ -54,6 +54,22 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
     })
   }
 
+  function dismissActiveOverlays() {
+    if (!overlayState.success && !overlayState.wrong && !overlayState.timeUp) {
+      return
+    }
+
+    overlayTimeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId))
+    overlayTimeoutsRef.current = []
+    soundEffects.stopAll()
+    setOverlayState((current) => ({
+      ...current,
+      success: false,
+      wrong: false,
+      timeUp: false,
+    }))
+  }
+
   const timer = useTimer({
     duration: quiz?.timer ?? 30,
     onExpire: () => {
@@ -168,6 +184,7 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
     timer,
     totalQuestions,
     clearOverlays,
+    dismissActiveOverlays,
     goToNextQuestion,
     goToPreviousQuestion,
     handleCorrect,

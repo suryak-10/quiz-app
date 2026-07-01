@@ -540,6 +540,7 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
     timer,
     totalQuestions,
     clearOverlays,
+    dismissActiveOverlays,
     goToNextQuestion,
     goToPreviousQuestion,
     handleCorrect,
@@ -567,6 +568,7 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
     <KeyboardShortcutProvider
       handlers={{
         onCorrect: handleCorrect,
+        onDismissOverlay: dismissActiveOverlays,
         onExit: () => setShowExitDialog(true),
         onFullscreen: toggleFullscreen,
         onNext: goToNextQuestion,
@@ -624,6 +626,10 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
                   <div className="shortcut-row">
                     <kbd>R</kbd>
                     <span>Restart</span>
+                  </div>
+                  <div className="shortcut-row">
+                    <kbd>D</kbd>
+                    <span>Dismiss Overlay</span>
                   </div>
                   <div className="shortcut-row">
                     <kbd>Y</kbd>

@@ -1,5 +1,6 @@
+import type { ReactNode } from 'react'
 import { useRef, useState } from 'react'
-import { Link, NavLink, Route, Routes } from 'react-router-dom'
+import { Link, NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 
 import './App.css'
 import { DeleteDialog } from './components/admin/DeleteDialog'
@@ -8,11 +9,21 @@ import { QuestionModal } from './components/admin/QuestionModal'
 import { QuizForm } from './components/admin/QuizForm'
 import { QuizSelector } from './components/admin/QuizSelector'
 import { ToastStack } from './components/admin/ToastStack'
-import { useQuestions } from './hooks/useQuestions'
-import { useQuizzes, useSelectedQuiz } from './hooks/useQuizzes'
-import type { QuizSummary, Question, Toast } from './types/quiz'
-import { getErrorMessage } from './lib/api'
 import { LoadingSkeleton } from './components/admin/LoadingSkeleton'
+import { KeyboardShortcutProvider } from './components/player/KeyboardShortcutProvider'
+import { MemoryOverlay } from './components/player/MemoryOverlay'
+import { QuestionImage } from './components/player/QuestionImage'
+import { QuestionNavigation } from './components/player/QuestionNavigation'
+import { QuizHeader } from './components/player/QuizHeader'
+import { QuizTimer } from './components/player/QuizTimer'
+import { SuccessOverlay } from './components/player/SuccessOverlay'
+import { TimeUpOverlay } from './components/player/TimeUpOverlay'
+import { WrongOverlay } from './components/player/WrongOverlay'
+import { useQuestions } from './hooks/useQuestions'
+import { useQuizPlayer } from './hooks/useQuizPlayer'
+import { useQuizzes, useSelectedQuiz } from './hooks/useQuizzes'
+import { getErrorMessage } from './lib/api'
+import type { QuizSummary, Question, Toast } from './types/quiz'
 
 const particles = Array.from({ length: 32 }, (_, index) => ({
   id: index,
@@ -25,7 +36,11 @@ const particles = Array.from({ length: 32 }, (_, index) => ({
 
 const quizCardMeta: Record<
   string,
-  { description: string; emoji: string; accent: 'primary' | 'secondary' | 'tertiary' | 'warning' }
+  {
+    description: string
+    emoji: string
+    accent: 'primary' | 'secondary' | 'tertiary' | 'warning'
+  }
 > = {
   character: {
     description: 'Identify your colleagues or famous icons from blurred silhouettes.',
@@ -58,6 +73,7 @@ function App() {
       <Routes>
         <Route element={<AdminDashboardPage />} path="/" />
         <Route element={<StageDashboardPage />} path="/dashboard" />
+        <Route element={<QuizPlayerPage />} path="/quiz/:quizId" />
       </Routes>
       <div className="ambient ambient-primary" aria-hidden="true" />
       <div className="ambient ambient-secondary" aria-hidden="true" />
@@ -97,7 +113,7 @@ function AppHeader({
 }: {
   title: string
   kicker: string
-  rightSlot?: React.ReactNode
+  rightSlot?: ReactNode
 }) {
   return (
     <header className="admin-topbar">
@@ -419,10 +435,12 @@ function StageDashboardPage() {
             <span aria-hidden="true">←</span>
             <span>Back To Admin</span>
           </Link>
-          <button className="footer-button footer-button-primary" type="button">
-            <span>Next</span>
-            <span aria-hidden="true">→</span>
-          </button>
+          <div className="quiz-player-footer-progress">
+            Keyboard first experience
+          </div>
+          <span className="footer-button footer-button-primary footer-button-static">
+            Full HD Ready
+          </span>
         </nav>
       </main>
     </div>
@@ -437,7 +455,7 @@ function StageCard({ quiz }: { quiz: QuizSummary }) {
   }
 
   return (
-    <button className={`game-card game-card-${meta.accent}`} type="button">
+    <Link className={`game-card game-card-${meta.accent}`} to={`/quiz/${quiz.id}`}>
       <div className="card-glow" aria-hidden="true" />
       <div className="game-icon" aria-hidden="true">
         <span>{meta.emoji}</span>
@@ -453,7 +471,249 @@ function StageCard({ quiz }: { quiz: QuizSummary }) {
       <span className="card-arrow" aria-hidden="true">
         →
       </span>
-    </button>
+    </Link>
+  )
+}
+
+function QuizPlayerPage() {
+  const navigate = useNavigate()
+  const params = useParams()
+  const quizId = params.quizId ?? null
+  const { selectedQuizQuery } = useSelectedQuiz(quizId)
+  const quiz = selectedQuizQuery.data
+
+  if (selectedQuizQuery.isLoading) {
+    return (
+      <div className="page-shell quiz-player-shell">
+        <section className="quiz-player-loading glass-panel">
+          <LoadingSkeleton className="skeleton-stage-card" />
+        </section>
+      </div>
+    )
+  }
+
+  if (selectedQuizQuery.isError || !quiz) {
+    return (
+      <div className="page-shell quiz-player-shell">
+        <section className="glass-panel message-card message-card-lg">
+          <p>We couldn&apos;t load this quiz.</p>
+          <div className="action-row">
+            <button
+              className="secondary-button"
+              type="button"
+              onClick={() => selectedQuizQuery.refetch()}
+            >
+              Retry
+            </button>
+            <button className="primary-button" type="button" onClick={() => navigate('/dashboard')}>
+              Back To Dashboard
+            </button>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
+  if (quiz.questions.length === 0) {
+    return (
+      <div className="page-shell quiz-player-shell">
+        <section className="glass-panel message-card message-card-lg">
+          <p>This quiz has no questions yet.</p>
+          <button className="primary-button" type="button" onClick={() => navigate('/')}>
+            Open Admin
+          </button>
+        </section>
+      </div>
+    )
+  }
+
+  return <QuizPlayerScene key={quiz.id} quiz={quiz} />
+}
+
+function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelectedQuiz>['selectedQuizQuery']['data'], undefined> }) {
+  const navigate = useNavigate()
+  const {
+    currentIndex,
+    currentQuestion,
+    overlayState,
+    showExitDialog,
+    timer,
+    totalQuestions,
+    clearOverlays,
+    goToNextQuestion,
+    goToPreviousQuestion,
+    handleCorrect,
+    handleWrong,
+    restartTimer,
+    setShowExitDialog,
+    startTimer,
+    toggleFullscreen,
+  } = useQuizPlayer(quiz)
+  const emoji = quizCardMeta[quiz.slug]?.emoji ?? '✨'
+
+  if (!currentQuestion || totalQuestions === 0) {
+    return null
+  }
+
+  const timerStatus = overlayState.timeUp
+    ? 'Time Up'
+    : timer.isRunning
+      ? 'Running'
+      : timer.secondsLeft === quiz.timer
+        ? 'Waiting'
+        : 'Paused'
+
+  return (
+    <KeyboardShortcutProvider
+      handlers={{
+        onCorrect: handleCorrect,
+        onExit: () => setShowExitDialog(true),
+        onFullscreen: toggleFullscreen,
+        onNext: goToNextQuestion,
+        onPause: timer.pause,
+        onPrevious: goToPreviousQuestion,
+        onRestart: restartTimer,
+        onStart: startTimer,
+        onWrong: handleWrong,
+      }}
+    >
+      <div className="page-shell quiz-player-shell">
+        <div className="quiz-player-layout">
+          <QuizHeader
+            currentIndex={currentIndex}
+            emoji={emoji}
+            title={quiz.title}
+            totalQuestions={totalQuestions}
+            onBack={() => setShowExitDialog(true)}
+          />
+
+          <main className="quiz-player-main">
+            <section className="quiz-player-stage">
+              <QuestionImage
+                alt={currentQuestion.answer}
+                hidden={overlayState.memoryReveal}
+                image={currentQuestion.image}
+              />
+              <MemoryOverlay visible={overlayState.memoryReveal} />
+              <SuccessOverlay visible={overlayState.success} />
+              <WrongOverlay visible={overlayState.wrong} />
+              <TimeUpOverlay visible={overlayState.timeUp} />
+            </section>
+
+            <aside className="quiz-player-sidebar">
+              <section className="player-sidebar-card player-sidebar-card-timer glass-panel">
+                <p className="panel-kicker">Timer</p>
+                <QuizTimer
+                  isRunning={timer.isRunning}
+                  isTimeUp={overlayState.timeUp}
+                  secondsLeft={timer.secondsLeft}
+                />
+              </section>
+
+              <section className="player-sidebar-card glass-panel">
+                <p className="panel-kicker">Keyboard Shortcuts</p>
+                <div className="shortcut-list">
+                  <div className="shortcut-row">
+                    <kbd>S</kbd>
+                    <span>Start Timer</span>
+                  </div>
+                  <div className="shortcut-row">
+                    <kbd>Space</kbd>
+                    <span>Pause</span>
+                  </div>
+                  <div className="shortcut-row">
+                    <kbd>R</kbd>
+                    <span>Restart</span>
+                  </div>
+                  <div className="shortcut-row">
+                    <kbd>Y</kbd>
+                    <span>Correct</span>
+                  </div>
+                  <div className="shortcut-row">
+                    <kbd>N</kbd>
+                    <span>Wrong</span>
+                  </div>
+                  <div className="shortcut-row">
+                    <kbd>←</kbd>
+                    <span>Previous</span>
+                  </div>
+                  <div className="shortcut-row">
+                    <kbd>→</kbd>
+                    <span>Next</span>
+                  </div>
+                  <div className="shortcut-row">
+                    <kbd>F</kbd>
+                    <span>Fullscreen</span>
+                  </div>
+                  <div className="shortcut-row">
+                    <kbd>Esc</kbd>
+                    <span>Home</span>
+                  </div>
+                </div>
+              </section>
+
+              <section className="player-sidebar-card glass-panel">
+                <p className="panel-kicker">Quiz Information</p>
+                <div className="player-info-block">
+                  <strong>{quiz.title}</strong>
+                  <span>
+                    Question {currentIndex + 1} / {totalQuestions}
+                  </span>
+                </div>
+                <div className="player-info-status">
+                  <span>Timer Status</span>
+                  <strong>{timerStatus}</strong>
+                </div>
+              </section>
+            </aside>
+          </main>
+
+          <QuestionNavigation
+            canGoNext={currentIndex < totalQuestions - 1}
+            canGoPrevious={currentIndex > 0}
+            currentIndex={currentIndex}
+            totalQuestions={totalQuestions}
+            onNext={goToNextQuestion}
+            onPrevious={goToPreviousQuestion}
+          />
+        </div>
+
+        {showExitDialog ? (
+          <div className="dialog-backdrop" role="presentation">
+            <div aria-modal="true" className="dialog-shell delete-dialog" role="dialog">
+              <div className="panel-header">
+                <p className="panel-kicker">Leave Quiz Player</p>
+                <h2>Return to home?</h2>
+              </div>
+              <p className="dialog-copy">
+                The current timer will stop and the projector screen will return to the
+                quiz dashboard.
+              </p>
+              <div className="action-row action-row-end">
+                <button
+                  className="secondary-button"
+                  type="button"
+                  onClick={() => setShowExitDialog(false)}
+                >
+                  Stay Here
+                </button>
+                <button
+                  className="primary-button"
+                  type="button"
+                  onClick={() => {
+                    clearOverlays()
+                    timer.pause()
+                    navigate('/dashboard')
+                  }}
+                >
+                  Leave Quiz
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    </KeyboardShortcutProvider>
   )
 }
 

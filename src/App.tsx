@@ -1,6 +1,14 @@
 import type { ReactNode } from 'react'
-import { useRef, useState } from 'react'
-import { Link, NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import {
+  Link,
+  NavLink,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
 
 import './App.css'
 import { DeleteDialog } from './components/admin/DeleteDialog'
@@ -66,7 +74,43 @@ const quizCardMeta: Record<
 
 const quizOrder = ['character', 'word', 'movie', 'memory']
 
+const quizPlayerShortcuts = [
+  { key: 'S', label: 'Start Timer' },
+  { key: 'Space', label: 'Pause' },
+  { key: 'R', label: 'Restart Timer' },
+  { key: 'D', label: 'Dismiss Overlay' },
+  { key: 'Y', label: 'Correct Answer' },
+  { key: 'N', label: 'Wrong Answer' },
+  { key: '←', label: 'Previous Question' },
+  { key: '→', label: 'Next Question' },
+  { key: 'F', label: 'Fullscreen' },
+  { key: 'Esc', label: 'Back to Home' },
+] as const
+
 function App() {
+  const location = useLocation()
+
+  useEffect(() => {
+    const isAdminRoute = location.pathname === '/'
+    const rootElement = document.getElementById('root')
+
+    document.documentElement.style.overflow = isAdminRoute ? 'auto' : 'hidden'
+    document.body.style.overflow = isAdminRoute ? 'auto' : 'hidden'
+
+    if (rootElement) {
+      rootElement.style.overflow = isAdminRoute ? 'visible' : 'hidden'
+    }
+
+    return () => {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+
+      if (rootElement) {
+        rootElement.style.overflow = ''
+      }
+    }
+  }, [location.pathname])
+
   return (
     <div className="app-shell">
       <BackgroundScene />
@@ -551,18 +595,35 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
     toggleFullscreen,
   } = useQuizPlayer(quiz)
   const emoji = quizCardMeta[quiz.slug]?.emoji ?? '✨'
+  const [showShortcutsPanel, setShowShortcutsPanel] = useState(false)
+  const shortcutsButtonRef = useRef<HTMLButtonElement | null>(null)
+
+  useEffect(() => {
+    if (!showShortcutsPanel) {
+      return
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key !== 'Escape') {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      setShowShortcutsPanel(false)
+      shortcutsButtonRef.current?.focus()
+    }
+
+    window.addEventListener('keydown', handleEscape, true)
+
+    return () => {
+      window.removeEventListener('keydown', handleEscape, true)
+    }
+  }, [showShortcutsPanel])
 
   if (!currentQuestion || totalQuestions === 0) {
     return null
   }
-
-  const timerStatus = overlayState.timeUp
-    ? 'Time Up'
-    : timer.isRunning
-      ? 'Running'
-      : timer.secondsLeft === quiz.timer
-        ? 'Waiting'
-        : 'Paused'
 
   return (
     <KeyboardShortcutProvider
@@ -589,7 +650,49 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
             onBack={() => setShowExitDialog(true)}
           />
 
+          <div className="quiz-player-help-dock">
+            <button
+              aria-controls="quiz-player-shortcuts-panel"
+              aria-expanded={showShortcutsPanel}
+              aria-label="Keyboard Shortcuts"
+              className="shortcut-fab"
+              data-tooltip="Keyboard Shortcuts"
+              ref={shortcutsButtonRef}
+              type="button"
+              onClick={() => setShowShortcutsPanel((current) => !current)}
+            >
+              <span aria-hidden="true" className="shortcut-fab-icon">
+                ⌨
+              </span>
+            </button>
+          </div>
+
           <main className="quiz-player-main">
+            <aside
+              aria-hidden={!showShortcutsPanel}
+              className={`quiz-player-shortcuts-panel ${
+                showShortcutsPanel ? 'glass-panel ' : ''
+              }${
+                showShortcutsPanel ? 'quiz-player-shortcuts-panel-open' : ''
+              }`}
+              id="quiz-player-shortcuts-panel"
+            >
+              <div className="shortcut-popover-header">
+                <p className="panel-kicker">Keyboard Shortcuts</p>
+                <h2>
+                  <span aria-hidden="true">⌨</span> Keyboard Shortcuts
+                </h2>
+              </div>
+              <div className="shortcut-list">
+                {quizPlayerShortcuts.map((shortcut) => (
+                  <div className="shortcut-row" key={shortcut.key}>
+                    <kbd>{shortcut.key}</kbd>
+                    <span>{shortcut.label}</span>
+                  </div>
+                ))}
+              </div>
+            </aside>
+
             <section className="quiz-player-stage">
               <QuestionImage
                 alt={currentQuestion.answer}
@@ -603,73 +706,12 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
             </section>
 
             <aside className="quiz-player-sidebar">
-              <section className="player-sidebar-card player-sidebar-card-timer glass-panel">
-                <p className="panel-kicker">Timer</p>
+              <section className="player-sidebar-timer">
                 <QuizTimer
                   isRunning={timer.isRunning}
                   isTimeUp={overlayState.timeUp}
                   secondsLeft={timer.secondsLeft}
                 />
-              </section>
-
-              <section className="player-sidebar-card glass-panel">
-                <p className="panel-kicker">Keyboard Shortcuts</p>
-                <div className="shortcut-list">
-                  <div className="shortcut-row">
-                    <kbd>S</kbd>
-                    <span>Start Timer</span>
-                  </div>
-                  <div className="shortcut-row">
-                    <kbd>Space</kbd>
-                    <span>Pause</span>
-                  </div>
-                  <div className="shortcut-row">
-                    <kbd>R</kbd>
-                    <span>Restart</span>
-                  </div>
-                  <div className="shortcut-row">
-                    <kbd>D</kbd>
-                    <span>Dismiss Overlay</span>
-                  </div>
-                  <div className="shortcut-row">
-                    <kbd>Y</kbd>
-                    <span>Correct</span>
-                  </div>
-                  <div className="shortcut-row">
-                    <kbd>N</kbd>
-                    <span>Wrong</span>
-                  </div>
-                  <div className="shortcut-row">
-                    <kbd>←</kbd>
-                    <span>Previous</span>
-                  </div>
-                  <div className="shortcut-row">
-                    <kbd>→</kbd>
-                    <span>Next</span>
-                  </div>
-                  <div className="shortcut-row">
-                    <kbd>F</kbd>
-                    <span>Fullscreen</span>
-                  </div>
-                  <div className="shortcut-row">
-                    <kbd>Esc</kbd>
-                    <span>Home</span>
-                  </div>
-                </div>
-              </section>
-
-              <section className="player-sidebar-card glass-panel">
-                <p className="panel-kicker">Quiz Information</p>
-                <div className="player-info-block">
-                  <strong>{quiz.title}</strong>
-                  <span>
-                    Question {currentIndex + 1} / {totalQuestions}
-                  </span>
-                </div>
-                <div className="player-info-status">
-                  <span>Timer Status</span>
-                  <strong>{timerStatus}</strong>
-                </div>
               </section>
             </aside>
           </main>

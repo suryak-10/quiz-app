@@ -1,0 +1,38 @@
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: office-quiz-backend
+    environment:
+      PORT: 3000
+    networks:
+      - office-quiz-network
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - ./server/uploads:/app/uploads
+      - ./server/db:/app/db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: office-quiz-frontend
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://backend:3000
+    networks:
+      - office-quiz-network
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+networks:
+  office-quiz-network:
+    name: office-quiz-network

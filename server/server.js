@@ -15,7 +15,8 @@ import { initializeStorage } from './utils/jsonDb.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const app = express()
-const port = Number(process.env.PORT) || 4000
+const port = Number(process.env.PORT) || 3000
+const host = '0.0.0.0'
 
 app.disable('x-powered-by')
 
@@ -56,8 +57,8 @@ async function startServer() {
   await initializeStorage()
   await fs.ensureDir(path.join(__dirname, 'uploads'))
 
-  httpServer = app.listen(port, () => {
-    console.log(`Office Quiz API listening on http://localhost:${port}`)
+  httpServer = app.listen(port, host, () => {
+    console.log(`Office Quiz API listening on http://${host}:${port}`)
   })
 }
 

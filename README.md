@@ -1,77 +1,82 @@
-# React + TypeScript + Vite
+# Office Quiz Docker Setup
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository uses the current project layout:
 
-Currently, two official plugins are available:
+- frontend at the repo root
+- backend in `server/`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The Docker setup keeps that layout as-is and provides a development workflow with hot reload for both services.
 
-## React Compiler
+## Services
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- Frontend: Vite + React on `http://localhost:5173`
+- Backend: Express API on `http://localhost:3000`
 
-Note: This will impact Vite dev & build performances.
+The frontend continues to use Vite proxying for `/api` and `/uploads`. In Docker, `VITE_API_URL=http://backend:3000` is provided by Compose so the proxy can reach the backend container. Outside Docker, the proxy falls back to `http://localhost:3000`.
 
-## Expanding the ESLint configuration
+## Requirements
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Docker
+- Docker Compose
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Build
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+docker compose build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Start
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+docker compose up
 ```
+
+## Start Detached
+
+```bash
+docker compose up -d
+```
+
+## Stop
+
+```bash
+docker compose down
+```
+
+## Rebuild And Start
+
+```bash
+docker compose up --build
+```
+
+## Development Behavior
+
+- Frontend source is bind-mounted into the container.
+- Backend source is bind-mounted into the container.
+- `node_modules` stay inside each container.
+- Frontend runs with Vite HMR on `0.0.0.0:5173`.
+- Backend runs with nodemon on `0.0.0.0:3000`.
+
+## Persistence
+
+These backend directories are persisted through bind mounts:
+
+- `server/uploads`
+- `server/db`
+
+That means uploaded quiz images and JSON database files survive container restarts.
+
+## Expected Result
+
+After running:
+
+```bash
+docker compose up
+```
+
+You should be able to access:
+
+- `http://localhost:5173`
+- `http://localhost:3000`
+
+Changes to React or Express source files should reload automatically without rebuilding the Docker images.

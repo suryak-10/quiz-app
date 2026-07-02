@@ -10,9 +10,9 @@ The Docker setup keeps that layout as-is and provides a development workflow wit
 ## Services
 
 - Frontend: Vite + React on `http://localhost:5173`
-- Backend: Express API on `http://localhost:3000`
+- Backend: Express API on `http://localhost:5163`
 
-The frontend continues to use Vite proxying for `/api` and `/uploads`. In Docker, `VITE_API_URL=http://backend:3000` is provided by Compose so the proxy can reach the backend container. Outside Docker, the proxy falls back to `http://localhost:3000`.
+The frontend continues to use Vite proxying for `/api` and `/uploads`. In Docker, `VITE_API_URL=http://backend:5163` is provided by Compose so the proxy can reach the backend container. Outside Docker, the proxy falls back to `http://localhost:5163`.
 
 ## Requirements
 
@@ -55,7 +55,7 @@ docker compose up --build
 - Backend source is bind-mounted into the container.
 - `node_modules` stay inside each container.
 - Frontend runs with Vite HMR on `0.0.0.0:5173`.
-- Backend runs with nodemon on `0.0.0.0:3000`.
+- Backend runs with nodemon on `0.0.0.0:5163`.
 
 ## Persistence
 
@@ -77,6 +77,6 @@ docker compose up
 You should be able to access:
 
 - `http://localhost:5173`
-- `http://localhost:3000`
+- `http://localhost:5163`
 
 Changes to React or Express source files should reload automatically without rebuilding the Docker images.

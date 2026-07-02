@@ -15,7 +15,7 @@ import { initializeStorage } from './utils/jsonDb.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const app = express()
-const port = Number(process.env.PORT) || 3000
+const port = Number(process.env.PORT) || 5163
 const host = '0.0.0.0'
 
 app.disable('x-powered-by')

@@ -5,11 +5,11 @@ services:
       dockerfile: Dockerfile
     container_name: office-quiz-backend
     environment:
-      PORT: 3000
+      PORT: 5163
     networks:
       - office-quiz-network
     ports:
-      - "3000:3000"
+      - "5163:5163"
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -24,7 +24,7 @@ services:
     depends_on:
       - backend
     environment:
-      VITE_API_URL: http://backend:3000
+      VITE_API_URL: http://backend:5163
     networks:
       - office-quiz-network
     ports:

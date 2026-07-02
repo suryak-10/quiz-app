@@ -37,7 +37,24 @@ async function ensureJsonFile(filePath, defaultData) {
 
 async function readJson(filePath, defaultData) {
   await ensureJsonFile(filePath, defaultData)
-  return fs.readJson(filePath)
+
+  try {
+    return await fs.readJson(filePath)
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) {
+      throw error
+    }
+
+    const backupPath = `${filePath}.corrupt-${Date.now()}`
+    const fileStats = await fs.stat(filePath).catch(() => null)
+
+    if (fileStats?.size) {
+      await fs.copy(filePath, backupPath)
+    }
+
+    await fs.writeJson(filePath, defaultData, { spaces: 2 })
+    return structuredClone(defaultData)
+  }
 }
 
 async function writeJson(filePath, data) {
@@ -125,8 +142,16 @@ export async function initializeStorage() {
     await writeQuizzes(quizzesData)
   }
 
-  await writeSettings({
+  const normalizedSettings = {
     ...defaultSettingsData,
     ...settingsData,
-  })
+  }
+
+  const settingsChanged = Object.keys(normalizedSettings).some(
+    (key) => normalizedSettings[key] !== settingsData[key],
+  )
+
+  if (settingsChanged) {
+    await writeSettings(normalizedSettings)
+  }
 }

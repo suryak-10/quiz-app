@@ -7,7 +7,88 @@
       "timer": 30,
       "createdAt": "2026-07-01T18:09:12.510Z",
       "updatedAt": "2026-07-01T18:09:12.510Z",
-      "questions": []
+      "questions": [
+        {
+          "id": "44e8c7d9-b972-40fc-a305-cc91d234d316",
+          "order": 1,
+          "image": "/uploads/character/0c37a42a-8837-44d7-ac31-9972f350073a.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:04:57.639Z",
+          "updatedAt": "2026-07-02T10:04:57.639Z"
+        },
+        {
+          "id": "e80f0ccf-1b49-4295-8d80-306ee96f8f3a",
+          "order": 2,
+          "image": "/uploads/character/be5a4f25-617f-4cc0-a1bc-b310d915c424.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:05:03.981Z",
+          "updatedAt": "2026-07-02T10:05:03.981Z"
+        },
+        {
+          "id": "1388608c-523d-4f14-ad88-482be3d65e83",
+          "order": 3,
+          "image": "/uploads/character/70e48103-c360-4d8b-b9ba-64236a6367d7.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:05:07.982Z",
+          "updatedAt": "2026-07-02T10:05:07.982Z"
+        },
+        {
+          "id": "6aeb8250-dc43-4fb5-9692-3473e95b6eec",
+          "order": 4,
+          "image": "/uploads/character/1f740b44-0718-4f8a-a511-101b8d59d6b9.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:05:11.821Z",
+          "updatedAt": "2026-07-02T10:05:11.821Z"
+        },
+        {
+          "id": "b318b20d-eec6-4272-9a41-32a4dccf38bd",
+          "order": 5,
+          "image": "/uploads/character/ba05ef65-e7e4-4eb2-ae1e-656db15e3b96.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:05:15.701Z",
+          "updatedAt": "2026-07-02T10:05:15.701Z"
+        },
+        {
+          "id": "2ebe5894-4a2e-4fb9-b015-0672b5046721",
+          "order": 6,
+          "image": "/uploads/character/319d884c-3bd3-433f-8515-9d97e4f77695.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:05:19.241Z",
+          "updatedAt": "2026-07-02T10:05:19.241Z"
+        },
+        {
+          "id": "c795b6e5-68a1-4f55-a4a5-3140e97dd5f1",
+          "order": 7,
+          "image": "/uploads/character/e1db567e-a66f-4834-9a40-9cff00d249d5.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:05:25.765Z",
+          "updatedAt": "2026-07-02T10:05:25.765Z"
+        },
+        {
+          "id": "c3fa38c6-412d-47ee-afbc-de4a7e3d9402",
+          "order": 8,
+          "image": "/uploads/character/af3a2cbc-5ae2-4fc7-92d9-81bce76716e6.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:05:45.589Z",
+          "updatedAt": "2026-07-02T10:05:45.589Z"
+        },
+        {
+          "id": "9feeb556-c645-4ace-ae9c-01cb7aae207b",
+          "order": 9,
+          "image": "/uploads/character/649375d6-4b28-4a10-b326-bebf3fd018a8.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:05:50.157Z",
+          "updatedAt": "2026-07-02T10:05:50.157Z"
+        },
+        {
+          "id": "950d4f74-14ec-4d89-bd2b-e2f9b76a2bbd",
+          "order": 10,
+          "image": "/uploads/character/9cbebc6c-ca47-4cc1-8664-47fba13592b8.png",
+          "answer": "Test",
+          "createdAt": "2026-07-02T10:05:53.852Z",
+          "updatedAt": "2026-07-02T10:05:53.852Z"
+        }
+      ]
     },
     {
       "id": "4483973e-904a-46f8-ab74-1b6a4e6c737f",
@@ -106,7 +187,120 @@
       "timer": 30,
       "createdAt": "2026-07-01T18:09:12.510Z",
       "updatedAt": "2026-07-01T18:09:12.510Z",
-      "questions": []
+      "questions": [
+        {
+          "id": "01c6bd47-cc79-49dd-876f-9d0203d9a0d6",
+          "order": 1,
+          "image": "/uploads/movie/08e72c9f-62d0-4f71-a422-e1427277ef52.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:36:10.331Z",
+          "updatedAt": "2026-07-02T09:36:10.331Z"
+        },
+        {
+          "id": "8e3b2009-5557-4413-a0b3-177c6921c1f7",
+          "order": 2,
+          "image": "/uploads/movie/f9fa9822-f4e2-491f-b074-5a4a1490ea44.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:36:37.524Z",
+          "updatedAt": "2026-07-02T09:36:37.524Z"
+        },
+        {
+          "id": "c443f183-14c4-4401-8f2f-3c81839ad1cf",
+          "order": 3,
+          "image": "/uploads/movie/d73bcdc1-5339-45b5-a655-a84ab1a2cede.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:36:47.939Z",
+          "updatedAt": "2026-07-02T09:36:47.939Z"
+        },
+        {
+          "id": "ad39ca4a-7886-4147-92b1-68039a51b5ad",
+          "order": 4,
+          "image": "/uploads/movie/7eb1fd14-6882-4d8e-b0a1-cda5790c43da.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:36:59.484Z",
+          "updatedAt": "2026-07-02T09:36:59.484Z"
+        },
+        {
+          "id": "584d3d18-85a9-40be-b19f-96edda2b88a6",
+          "order": 5,
+          "image": "/uploads/movie/ab62a565-e3af-4769-a614-30cc32280658.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:37:25.906Z",
+          "updatedAt": "2026-07-02T09:37:25.906Z"
+        },
+        {
+          "id": "0cc82866-7359-4c0d-aeb0-6ff35b1d40a8",
+          "order": 6,
+          "image": "/uploads/movie/03a60fd5-1dea-4dc0-9766-a39d5bb3f64e.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:37:30.097Z",
+          "updatedAt": "2026-07-02T09:37:30.097Z"
+        },
+        {
+          "id": "d5f566b0-b831-4d8b-85c7-c17ae443cce4",
+          "order": 7,
+          "image": "/uploads/movie/9db7afee-9449-471d-b3d1-60e9cecad446.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:37:33.753Z",
+          "updatedAt": "2026-07-02T09:37:33.753Z"
+        },
+        {
+          "id": "30fca389-8537-4616-9975-4f529c8dd3b3",
+          "order": 8,
+          "image": "/uploads/movie/46465fd0-1c44-4a8f-aa86-aa300823baa6.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:37:38.482Z",
+          "updatedAt": "2026-07-02T09:37:38.482Z"
+        },
+        {
+          "id": "c666cd00-5d40-4afa-b590-1f3a45049df9",
+          "order": 9,
+          "image": "/uploads/movie/57f1ef06-8a07-4ab8-a971-494bd6a469bc.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:37:42.977Z",
+          "updatedAt": "2026-07-02T09:37:42.977Z"
+        },
+        {
+          "id": "73da8592-e85d-465e-b7d6-8ce1357c9a8f",
+          "order": 10,
+          "image": "/uploads/movie/162c7a47-9ddd-4a96-9efb-9bab94d29c9a.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:37:48.602Z",
+          "updatedAt": "2026-07-02T09:37:48.602Z"
+        },
+        {
+          "id": "336096d0-2bc8-4142-b910-95a677f684bd",
+          "order": 11,
+          "image": "/uploads/movie/69b036ea-3310-4909-af8e-7cd5fc05e352.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:37:57.369Z",
+          "updatedAt": "2026-07-02T09:37:57.369Z"
+        },
+        {
+          "id": "f53f6954-36a4-478e-98aa-327be57eea7a",
+          "order": 12,
+          "image": "/uploads/movie/569e099b-1b91-472e-9169-d6fce2aeb86d.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:38:01.129Z",
+          "updatedAt": "2026-07-02T09:38:01.129Z"
+        },
+        {
+          "id": "58749fba-8ebf-4308-8917-e9767f0433ad",
+          "order": 13,
+          "image": "/uploads/movie/9d36fa34-2d5e-406d-8862-8a3e22ab1b78.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:38:05.489Z",
+          "updatedAt": "2026-07-02T09:38:05.489Z"
+        },
+        {
+          "id": "f3ec2ee4-44b8-485c-b668-b1ad281b0178",
+          "order": 14,
+          "image": "/uploads/movie/b0740826-d042-463d-b481-f02ca9c8a1d2.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:38:09.033Z",
+          "updatedAt": "2026-07-02T09:38:09.033Z"
+        }
+      ]
     },
     {
       "id": "cc1facaf-8ce6-4715-a3d2-d1105da1edb5",
@@ -115,7 +309,88 @@
       "timer": 30,
       "createdAt": "2026-07-01T18:09:12.510Z",
       "updatedAt": "2026-07-01T18:09:12.510Z",
-      "questions": []
+      "questions": [
+        {
+          "id": "fcfba160-8cd1-4127-b9ae-c70a85e3a48f",
+          "order": 1,
+          "image": "/uploads/memory/16ee0c2c-587c-4896-864f-42020f497e8a.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:59:49.492Z",
+          "updatedAt": "2026-07-02T09:59:49.492Z"
+        },
+        {
+          "id": "3c3224a7-a993-4763-9d41-695cb4415fd2",
+          "order": 2,
+          "image": "/uploads/memory/4cb415e5-037f-4974-bfdf-27c8b38b9fd0.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:59:54.125Z",
+          "updatedAt": "2026-07-02T09:59:54.125Z"
+        },
+        {
+          "id": "1ab8091f-3d29-48a3-8abe-fc8c1fc5642a",
+          "order": 3,
+          "image": "/uploads/memory/929bb0db-9eee-40eb-88ce-e97d1fd7edba.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T09:59:57.859Z",
+          "updatedAt": "2026-07-02T09:59:57.859Z"
+        },
+        {
+          "id": "97a0a5ae-ef01-40fa-950e-70e445eee5a9",
+          "order": 4,
+          "image": "/uploads/memory/bcd21085-268f-45b5-bf5b-22658d1da5b4.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T10:00:01.234Z",
+          "updatedAt": "2026-07-02T10:00:01.234Z"
+        },
+        {
+          "id": "a542fcd0-7715-4138-a8cc-b691d04a3484",
+          "order": 5,
+          "image": "/uploads/memory/328e0482-11a1-4c5e-abf8-ffe5f64b874c.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T10:00:05.834Z",
+          "updatedAt": "2026-07-02T10:00:05.834Z"
+        },
+        {
+          "id": "87b083e4-3fc5-4ea4-8504-2e30b43a5196",
+          "order": 6,
+          "image": "/uploads/memory/8589a904-d261-458e-bbc7-475f064eb2dd.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T10:00:09.171Z",
+          "updatedAt": "2026-07-02T10:00:09.171Z"
+        },
+        {
+          "id": "781fe52e-453d-4cea-97e7-f99789e49fe8",
+          "order": 7,
+          "image": "/uploads/memory/6f342ea9-3a87-4b0f-b8af-9a33fed3085d.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T10:00:12.491Z",
+          "updatedAt": "2026-07-02T10:00:12.491Z"
+        },
+        {
+          "id": "d0e96beb-c9b6-46cb-a3db-c3f8e6fa6fd5",
+          "order": 8,
+          "image": "/uploads/memory/74aa269e-3fd9-4543-9ac3-6324c9b529e8.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T10:00:15.947Z",
+          "updatedAt": "2026-07-02T10:00:15.947Z"
+        },
+        {
+          "id": "e6dfcb34-9676-4605-a4b3-08b4cf40967e",
+          "order": 9,
+          "image": "/uploads/memory/a78726bb-83d7-4b85-90de-8b01f5173e68.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T10:00:19.307Z",
+          "updatedAt": "2026-07-02T10:00:19.307Z"
+        },
+        {
+          "id": "00cbec08-8390-49e3-8a62-8dbfd88cd3f5",
+          "order": 10,
+          "image": "/uploads/memory/919a5670-2d70-42ac-89d9-49c76aa09848.png",
+          "answer": "Vada Chennai",
+          "createdAt": "2026-07-02T10:00:22.523Z",
+          "updatedAt": "2026-07-02T10:00:22.523Z"
+        }
+      ]
     }
   ]
 }

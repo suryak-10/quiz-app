@@ -6,6 +6,10 @@ import { useSoundEffects } from './useSoundEffects'
 import { useTimer } from './useTimer'
 
 const EMPTY_QUESTIONS: Quiz['questions'] = []
+// time.mp3 plays at full volume for the last stretch of the countdown as a warning cue.
+const TIMER_WARNING_THRESHOLD_SECONDS = 5
+const TIME_AMBIENT_VOLUME = 0.5
+const TIME_AMBIENT_WARNING_VOLUME = 1
 
 type OverlayState = {
   success: boolean
@@ -24,6 +28,7 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
     memoryReveal: false,
   })
   const overlayTimeoutsRef = useRef<number[]>([])
+  const isTimeAmbientPlayingRef = useRef(false)
   const isMemoryQuiz = quiz?.slug === 'memory'
   const soundEffects = useSoundEffects()
 
@@ -81,12 +86,24 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
         memoryReveal: Boolean(isMemoryQuiz),
       }))
     },
-    onWarningTick: () => {
-      if (!isMemoryQuiz) {
-        soundEffects.playTick()
-      }
-    },
   })
+
+  useEffect(() => {
+    if (timer.isRunning && !isTimeAmbientPlayingRef.current) {
+      const duration = quiz?.timer ?? 30
+      const elapsedSeconds = Math.max(0, duration - timer.secondsLeft)
+      soundEffects.playTime(elapsedSeconds)
+    } else if (!timer.isRunning && isTimeAmbientPlayingRef.current) {
+      soundEffects.stopTime()
+    }
+
+    isTimeAmbientPlayingRef.current = timer.isRunning
+  }, [timer.isRunning, timer.secondsLeft, quiz?.timer, soundEffects])
+
+  useEffect(() => {
+    const isFinalStretch = timer.secondsLeft > 0 && timer.secondsLeft <= TIMER_WARNING_THRESHOLD_SECONDS
+    soundEffects.setTimeVolume(isFinalStretch ? TIME_AMBIENT_WARNING_VOLUME : TIME_AMBIENT_VOLUME)
+  }, [timer.secondsLeft, soundEffects])
 
   function resetForQuestion(index: number) {
     clearOverlays()
@@ -137,6 +154,7 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
     if (
       isMemoryQuiz ||
       overlayState.success ||
+      overlayState.wrong ||
       overlayState.timeUp ||
       overlayState.memoryReveal
     ) {
@@ -156,12 +174,14 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
     if (
       isMemoryQuiz ||
       overlayState.wrong ||
+      overlayState.success ||
       overlayState.timeUp ||
       overlayState.memoryReveal
     ) {
       return
     }
 
+    pauseTimer()
     soundEffects.playWrong()
     setOverlayState((current) => ({ ...current, wrong: true }))
     const timeoutId = window.setTimeout(() => {

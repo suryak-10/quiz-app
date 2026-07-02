@@ -2,20 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 
 type UseTimerOptions = {
   duration: number
-  warningThreshold?: number
   onExpire?: () => void
-  onWarningTick?: (secondsRemaining: number) => void
 }
 
-export function useTimer({
-  duration,
-  warningThreshold = 5,
-  onExpire,
-  onWarningTick,
-}: UseTimerOptions) {
+export function useTimer({ duration, onExpire }: UseTimerOptions) {
   const [secondsLeft, setSecondsLeft] = useState(duration)
   const [isRunning, setIsRunning] = useState(false)
-  const lastWarningRef = useRef<number | null>(null)
   const expireHandledRef = useRef(false)
 
   useEffect(() => {
@@ -39,27 +31,20 @@ export function useTimer({
   }, [isRunning])
 
   useEffect(() => {
-    if (secondsLeft > 0 && secondsLeft <= warningThreshold && lastWarningRef.current !== secondsLeft) {
-      lastWarningRef.current = secondsLeft
-      onWarningTick?.(secondsLeft)
-    }
-
     if (secondsLeft === 0 && !expireHandledRef.current) {
       expireHandledRef.current = true
       setIsRunning(false)
       onExpire?.()
     }
-  }, [onExpire, onWarningTick, secondsLeft, warningThreshold])
+  }, [onExpire, secondsLeft])
 
   function reset(nextDuration = duration) {
-    lastWarningRef.current = null
     expireHandledRef.current = false
     setIsRunning(false)
     setSecondsLeft(nextDuration)
   }
 
   function restart() {
-    lastWarningRef.current = null
     expireHandledRef.current = false
     setSecondsLeft(duration)
     setIsRunning(false)

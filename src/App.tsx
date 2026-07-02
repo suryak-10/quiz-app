@@ -626,6 +626,13 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
     return null
   }
 
+  const isRevealOverlayActive =
+    overlayState.memoryReveal ||
+    overlayState.success ||
+    overlayState.wrong ||
+    overlayState.timeUp
+  const showPausedOverlay = !timer.isRunning && !isRevealOverlayActive
+
   return (
     <KeyboardShortcutProvider
       handlers={{
@@ -697,7 +704,12 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
             <section className="quiz-player-stage">
               <QuestionImage
                 alt={currentQuestion.answer}
-                hidden={overlayState.memoryReveal}
+                hidden={
+                  overlayState.memoryReveal ||
+                  overlayState.timeUp ||
+                  overlayState.wrong ||
+                  showPausedOverlay
+                }
                 image={currentQuestion.image}
               />
               <MemoryOverlay visible={overlayState.memoryReveal} />

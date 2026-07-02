@@ -589,6 +589,7 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
     goToPreviousQuestion,
     handleCorrect,
     handleWrong,
+    pauseTimer,
     restartTimer,
     setShowExitDialog,
     startTimer,
@@ -633,7 +634,7 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
         onExit: () => setShowExitDialog(true),
         onFullscreen: toggleFullscreen,
         onNext: goToNextQuestion,
-        onPause: timer.pause,
+        onPause: pauseTimer,
         onPrevious: goToPreviousQuestion,
         onRestart: restartTimer,
         onStart: startTimer,
@@ -750,7 +751,7 @@ function QuizPlayerScene({ quiz }: { quiz: Exclude<ReturnType<typeof useSelected
                   type="button"
                   onClick={() => {
                     clearOverlays()
-                    timer.pause()
+                    pauseTimer()
                     navigate('/dashboard')
                   }}
                 >

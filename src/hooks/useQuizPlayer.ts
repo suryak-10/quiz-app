@@ -46,6 +46,7 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
   function clearOverlays() {
     overlayTimeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId))
     overlayTimeoutsRef.current = []
+    soundEffects.stopAll()
     setOverlayState({
       success: false,
       wrong: false,
@@ -73,7 +74,7 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
   const timer = useTimer({
     duration: quiz?.timer ?? 30,
     onExpire: () => {
-      soundEffects.stopAll()
+      soundEffects.playTimeUp()
       setOverlayState((current) => ({
         ...current,
         timeUp: !isMemoryQuiz,
@@ -112,7 +113,6 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
 
   function restartTimer() {
     clearOverlays()
-    soundEffects.stopAll()
     timer.restart()
   }
 
@@ -128,6 +128,11 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
     timer.start()
   }
 
+  function pauseTimer() {
+    soundEffects.stopAll()
+    timer.pause()
+  }
+
   function handleCorrect() {
     if (
       isMemoryQuiz ||
@@ -138,8 +143,8 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
       return
     }
 
-    timer.pause()
-    soundEffects.playSuccess()
+    pauseTimer()
+    soundEffects.playCorrect()
     setOverlayState((current) => ({ ...current, success: true, wrong: false, timeUp: false }))
     const timeoutId = window.setTimeout(() => {
       setOverlayState((current) => ({ ...current, success: false }))
@@ -189,6 +194,7 @@ export function useQuizPlayer(quiz: Quiz | undefined) {
     goToPreviousQuestion,
     handleCorrect,
     handleWrong,
+    pauseTimer,
     restartTimer,
     resetForQuestion,
     setShowExitDialog,
